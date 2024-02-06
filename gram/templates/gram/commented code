@@ -1,0 +1,129 @@
+# def likeToggle(request):
+#     current_user = MyUser.objects.get(username=request.user.username)
+#     post=Posts.objects.get(id=id)
+#     user_id=post.user.id
+#     img=post.post_image.url
+#     likes=post.likes.all()
+#     receiver = MyUser.objects.get(id=user_id)
+#     if current_user in likes:
+#         post.likes.remove(current_user.id)
+#         if current_user.id==user_id:
+#             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+#         else:
+#             notify.send(current_user, recipient=receiver, verb='unliked your post', description=img, pid=id)
+#     else:
+#         post.likes.add(current_user.id)
+#         if current_user.id==user_id:
+#             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+#         else:
+#             notify.send(current_user, recipient=receiver, verb='liked your post', description=img, pid=id)
+#     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))  #args=[user_profile.username]
+
+# @login_required
+# def home(request):
+#     # from django.utils import timezone
+#     # print(timezone.now())
+#     userobj = MyUser.objects.get(username=request.user.username)
+#     following = userobj.followers.all()
+#     liked = False
+#     posts_obj=Posts.objects.filter(user=request.user.id).order_by('-id')
+#     # current_user_posts=Posts.objects.filter(user=request.user.id )
+#     context={"posts":posts_obj}
+#     return render(request, 'gram/home.html', context=context)
+
+# def search():
+# print(users)
+    #     current_user = MyUser.objects.get(username=request.user.username)
+    # blocked_user=current_user.blocked_user.all()
+    # blocked_by=current_user.blocked_by.all()
+        # for user in users_list: 
+        #     blocked=user.blocked_user.all()
+        #     blockedy=user.blocked_by.all()           
+        #     print("True")
+        #     users=MyUser.objects.filter(Q(full_name__icontains=url_parameter) | Q(username__icontains=url_parameter)).exclude(blocked_user__in=blocked_user).exclude(blocked_by__in=blocked_by)
+
+# <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+# <path d="M17.516 3c2.382 0 4.487 1.564 4.487 4.712 0 4.963-6.528 8.297-10.003 11.935-3.475-3.638-10.002-6.971-10.002-11.934 0-3.055 
+# 2.008-4.713 4.487-4.713 3.18 0 4.846 3.644 5.515 5.312.667-1.666 2.333-5.312 5.516-5.312zm0-2c-2.174 0-4.346 1.062-5.516 
+# 3.419-1.17-2.357-3.342-3.419-5.515-3.419-3.403 0-6.484 2.39-6.484 6.689 0 7.27 9.903 10.938 11.999 15.311 2.096-4.373 
+# 12-8.041 12-15.311 0-4.586-3.414-6.689-6.484-6.689z"/></svg>
+# <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 4.419c-2.826-5.695-11.999-4.064-11.999
+#  3.27 0 7.27 9.903 10.938 11.999 15.311 2.096-4.373 12-8.041 12-15.311 0-7.327-9.17-8.972-12-3.27z"/></svg>
+
+#<video width="500px" height="500px" controls>
+#      <source src="{{ post.video_file.url }}" type="video/mp4">
+# </video>
+
+# <!-- start here -->
+#                 <!-- {% if user.tales.all %}
+#                     {% if story.name == user.username%}
+#                     <div class="story { story.seen ? 'seen' : '' }" data-id="{{storyId}}" data-last-updated="{{story.lastUpdated}}" data-photo="{{story.photo}}">
+#                         <a class="item-link" href="{{story.link}}">
+#                           <span class="item-preview">
+#                             <img src="{{story.photo}}" />
+#                           </span>
+#                           <span class="info" itemProp="author" itemScope="" itemType="http://schema.org/Person">
+#                             <strong class="name" itemProp="name">{{story.name}}</strong>
+#                             <span class="time">{{story.lastUpdated}}</span>
+#                           </span>
+#                         </a>
+                        
+#                         <ul class="items"> -->
+                        
+#                             <!-- story item -->
+#                             <!-- <li data-id="{{storyItemId}}" data-time="{{storyItem.time}}" class="{{storyItem.seen}}">
+#                                 <a href="{{storyItem.src}}"
+                                
+#                                  data-type="{{storyItem.type}}" 
+#                                  data-length="{{storyItem.length}}" 
+#                                  data-link="{{storyItem.link}}" 
+#                                  data-linkText="{{storyItem.linkText}}" 
+                                 
+#                                  data-custom-key="{storyItem.custom-key}" 
+#                                  data-another-custom-key="{storyItem.another-custom-key}">
+#                                     <img src="{{storyItem.preview}}" />
+#                                 </a>
+#                             </li> -->
+#                             <!--/ story item -->
+                            
+#                         <!-- </ul>
+#                     </div>
+#                     {% endif %}
+#                 {% else %}
+#                 <span class="my-1" style="cursor:pointer; width:100%; height:100%" 
+#                 onclick="location.href='{% url 'tale' %}'"><img class="img-responsive rounded-circle" style="width: 123px; height:90px" src="{{user.DP.url}}"/> </span>
+#                 {% endif %} -->
+                
+#                 <!-- story -->
+    # <!-- <div class="story { story.seen ? 'seen' : '' }" data-id="{{storyId}}" data-last-updated="{{story.lastUpdated}}" data-photo="{{story.photo}}">
+    #     <a class="item-link" href="{{story.link}}">
+    #       <span class="item-preview">
+    #         <img src="{{story.photo}}" />
+    #       </span>
+    #       <span class="info" itemProp="author" itemScope="" itemType="http://schema.org/Person">
+    #         <strong class="name" itemProp="name">{{story.name}}</strong>
+    #         <span class="time">{{story.lastUpdated}}</span>
+    #       </span>
+    #     </a>
+        
+    #     <ul class="items"> -->
+        
+    #         <!-- story item -->
+    #         <!-- <li data-id="{{storyItemId}}" data-time="{{storyItem.time}}" class="{{storyItem.seen}}">
+    #             <a href="{{storyItem.src}}"
+                
+    #              data-type="{{storyItem.type}}" 
+    #              data-length="{{storyItem.length}}" 
+    #              data-link="{{storyItem.link}}" 
+    #              data-linkText="{{storyItem.linkText}}" 
+                 
+    #              data-custom-key="{storyItem.custom-key}" 
+    #              data-another-custom-key="{storyItem.another-custom-key}">
+    #                 <img src="{{storyItem.preview}}" />
+    #             </a>
+    #         </li> -->
+    #         <!--/ story item -->
+            
+    #     <!-- </ul>
+    # </div> -->
+    # <!--/ story -->

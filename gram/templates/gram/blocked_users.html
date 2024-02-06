@@ -1,0 +1,30 @@
+{% extends "gram/base.html" %}
+{% block title %} Blocked Users {% endblock title%}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h4>{{user.username}}</h4>
+    </div>
+{% if blocked_users%}
+    {% for blocked_user in blocked_users %}
+        <div class="card-body">
+            <span class="my-1  text-break" style="cursor:pointer;"
+                        onclick="location.href='{% url 'profile' username=blocked_user %}'">
+                        <img class="rounded-circle img-fluid"
+                    src="{{ blocked_user.DP.url }} " 
+                    style=" cursor: pointer; border:.1px solid  #e2e3e4; height: 40px;width: 40px;"/>
+                  {{ blocked_user }}</span>
+            <span class="Ublock my-1  btn btn-sm btn-outline-dark" id="{{ blocked_user.id }}" style="cursor:pointer;">
+              <span id="Block{{ blocked_user.id }}">unblock</span>
+               
+            </span>
+        </div>
+        
+        
+    {% endfor %}
+    {%else%}
+    <p class="text-muted text-center font-weight-bold my-1"> No blocked users </p>
+    {% endif %}
+</div>
+
+{% endblock content %}

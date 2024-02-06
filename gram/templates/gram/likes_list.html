@@ -1,0 +1,68 @@
+{% extends "gram/base.html" %}
+{% block title %} likes {% endblock title%}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h4>likes</h4>
+    </div>
+    {% if likes %}
+    {% for user in likes %}
+        <div class="card-body">
+            <span class="my-1  text-break" style="cursor:pointer;"
+                        onclick="location.href='{% url 'profile' username=user.user %}'">
+                        <img class="rounded-circle img-fluid"
+                    src="{{ user.user.DP.url }} " 
+                    style=" cursor: pointer; border:.1px solid  #e2e3e4; height: 40px;width: 40px;"/>
+                  {{ user.user.username }}</span>
+                  
+                  {% if request.user.username != user.user.username %}
+                  <span role="switch" style="width: 100%;" class="followRequest" id="{{ user.user.id }}">
+                      {% if request.user in user.user.following.all %}
+                          <div class="col-md-3">
+                              <a
+                                  href="{% url 'follow'  %}"
+                                  id="followbtn{{ user.user.id }}"
+                                  style="text-decoration:none;
+                                  transition: .4s;"
+                                  class="btn btn-sm btn-outline-dark">
+                                  Unfollow
+                              </a>
+                          </div>
+                      {% else %}
+                          {% if request.user in user.user.requested_by.all %}
+                          <div class="col-md-3">
+                              <a
+                                  href="{% url 'follow' %}"
+                                  id="followbtn{{ user.user.id }}"
+                                  style="text-decoration:none;
+                                  transition: .4s;"
+                                  class="btn btn-sm btn-outline-dark">
+                                  Requested
+                              </a>
+                          </div>
+                          {% else %}
+                          <div class="col-md-3">
+                              <a
+                                  href="{% url 'follow'  %}"
+                                  id="followbtn{{ user.user.id }}"
+                                  style="text-decoration:none;
+                                  transition: .4s;"
+                                  class="btn btn-sm  btn-outline-dark">
+                                  Follow
+                              </a>
+                          </div>
+                          {% endif %}
+                      {% endif %}
+                  </span>
+                  {% endif %}
+                  
+            <!-- <a href="{% url 'profile' username=user %}" class=" ">{{user}}</a> -->
+        </div>
+        
+        
+    {% endfor %}
+    {% else %}
+        <p class="text-muted text-center font-weight-bold my-1" >No likes</p>
+    {% endif %}
+</div>
+{% endblock content %}

@@ -1,0 +1,31 @@
+{% extends "gram/base.html" %}
+{% block title %} Saved Posts {% endblock title%}
+{% load hitcount_tags %}
+{%block head%}
+{%load static%}
+<script src="{% static '/gram/javascript/toggle_list_grid.js' %}" type="text/javascript"></script>  
+{% endblock head %}
+{% block content %}
+<div class="posts ">
+
+        
+    {% if isSaved %}
+    
+        <div class="grid" id="grid">
+            
+            {% for post in isSaved %}
+                <img class="img-fluid mt-1"
+                src="{{ post.post.post_image.url }} "  onclick='postclick("{{post.post.id}}")' style="cursor: pointer; width:366px;height:366px"/>
+            {% endfor %}
+                
+        </div>
+        <!-- <button type="button"></button> -->
+        <div class="list" style="display: none;" id="list">
+            {% include 'gram/saved_posts.html' %}
+        </div>
+    
+        
+    {% else %}
+        <p class="text-muted text-center font-weight-bold">No saved posts yet</p>
+    {% endif %}
+{% endblock content%}

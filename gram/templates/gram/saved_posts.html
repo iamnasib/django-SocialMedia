@@ -1,0 +1,153 @@
+{%load static%}
+<script src="{% static '/gram/javascript/toggle_list_grid.js' %}" type="text/javascript"></script>  
+<div class="form-content" >
+    <div class="form-row justify-content-center">
+        <div class="col-md-4">
+            {% if isSaved %}
+                {% for post in isSaved%}
+                <div class="form-group text-left" id="post{{post.post.id}}"  style="border:.1px solid  #e2e3e4">
+                    <span class="my-1" style="cursor:pointer;" onclick="location.href='{% url 'profile' username=post.post.user %}'">
+                    <img class="img-fluid rounded-circle my-1 mx-1 "
+                        src="{{ post.post.user.DP.url }} " style="width:50px; cursor: pointer;border:.1px solid #e2e3e4;"/>
+                    {{post.post.user}}</span>
+                    {% if user == post.post.user %}
+                        <span style="cursor:pointer;" onclick="location.href='{% url 'delete-post' id=post.post.id %}'" >delete</span>
+                        <span style="cursor:pointer;" onclick="location.href='{% url 'edit-post' pk=post.post.id %}'" >Edit</span>
+                        <span style="cursor:pointer;" class="repository" id="{{ post.post.id }}" >
+                          {% if not post.post.in_repository%}
+                          <span id="repository{{ post.post.id }}">Repository</span>
+                          {% else %}
+                          <span id="repository{{ post.post.id }}">Show on profile</span>
+                          {% endif %}
+                        </span>
+                    {% endif %}
+                    {% if user == post.post.user %}
+                    <img class="img-fluid my"
+                    src="{{ post.post.post_image.url }} "  
+                    style="cursor: pointer;border-top:.1px solid #e2e3e4;border-bottom:.1px solid #e2e3e4"/><br>
+                    {% else %}
+                    <span role="switch" class="dbllike" id="{{ post.post.id }}">
+                      <img class="img-fluid my"
+                      src="{{ post.post.post_image.url }} "  
+                      style="cursor: pointer;border-top:.1px solid #e2e3e4;border-bottom:.1px solid #e2e3e4"/>
+                      </span><br>
+
+                    
+                    {% endif %}
+                    <div class="mx-1">
+                        
+                        {% if user == post.post.user %}
+                        <i style="font-size: 25px;" class="fas fa-heart mt-2" aria-hidden="true"></i>
+                        {% else %}
+                        <span role="switch" aria-checked="false" style="cursor: pointer;"  class="like" id="{{ post.post.id }}">
+                          {% if post in liked_post %}
+                          
+                          <i id="lovebtn{{ post.post.id }}" style="font-size: 25px;
+                          transition: color 200ms;"   class="fas fa-heart mt-2" aria-hidden="true"></i>
+                          
+                          {% else %}
+                          <!-- <a
+                            href="{% url 'like' %}"
+                            style="text-decoration:none;font-size: 25px;
+                            transition: color 200ms;"
+                            
+                            id="likebtn{{ post.id }}"
+                          > -->
+                          <i id="lovebtn{{ post.post.id }}" style="font-size: 25px;
+                          transition: color 200ms;"  class="far fa-heart mt-2" aria-hidden="true"></i>
+                           {% endif %}
+                      </span>
+
+                           
+                  
+                        {% endif %}
+                        {% if not post.post.comments_disabled%}
+                        <span class="my-1" style="cursor:pointer;"
+                          onclick="location.href='{% url 'view-post' id=post.post.id %}'">
+                          <i style="font-size: 25px;" class="far fa-comment"></i></span>
+                          {% endif %}
+                        
+                        <span role="switch" aria-checked="false" style="cursor: pointer"  class="save" id="{{ post.post.id }}">
+                          {% if post in isSaved %}
+                          
+                          <i id="savebtn{{ post.post.id }}" style="font-size: 25px;
+                          transition: color 200ms;" class="fas fa-bookmark"></i>
+                          
+                          {% else %}
+                      
+                          <i id="savebtn{{ post.post.id }}" style="font-size: 25px;
+                          transition: color 200ms;" class="far  fa-bookmark"></i>
+                          {% endif %}
+                      </span>
+
+                      {% if post.post.loves.count == 0 %}
+                        <p id="loveCount{{post.post.id}}" >{{post.post.loves.count}} loves</p>
+                    {% else %}
+                      {% if post.post.loves.count == 1 %}
+                          <p style="cursor:pointer;"
+                          onclick="location.href='{% url 'likeList' id=post.post.id %}'"
+                          id="loveCount{{post.post.id}}" >{{post.post.loves.count}} love</p>
+                      {% else %}
+                          <p style="cursor:pointer;"
+                          onclick="location.href='{% url 'likeList' id=post.post.id %}'" 
+                          id="loveCount{{post.post.id}}">{{post.post.loves.count}} loves</p>
+                      {% endif %} 
+                      {% endif %} 
+                    
+                        <p>{{post.post.caption}}</p>
+                        <time class="small text-muted">
+                          {% if post.post.is_past_due%}
+                          {{post.post.uploaded_on |date:"d M Y"}}
+                          {% else %}
+                          {{post.post.uploaded_on |timesince}} ago
+                          {% endif %}
+                          </time><br>
+                        {% if post.post.details.count == 1 %}
+                        <a class="small text-muted" href="{% url 'view-post' post.post.id %}"
+            > View {{ post.post.details.count }} Comment</a>
+            {% endif%}
+            {% if post.post.details.count > 1 %}
+            <a class="small text-muted" href="{% url 'view-post' post.post.id %}"
+            > View all {{ post.post.details.count }} Comments</a>
+            {% endif%}
+                    </div>               
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted text-center font-weight-bold"> Nothing Here </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% if isSaved.count >= 10 %}
+{% if is_paginated %}
+	{% if page_obj.has_previous %}
+		<a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+		<a
+		  class="btn btn-outline-info mb-4"
+		  href="?page={{ page_obj.previous_page_number }}"
+		  >Previous</a
+		>
+	{% endif %}
+	{% for num in page_obj.paginator.page_range %} 
+		{% if page_obj.number == num %}
+			<a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+		{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+			<a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+		{% endif %}
+	{% endfor %}
+
+	{% if page_obj.has_next %}
+		<a
+		  class="btn btn-outline-info mb-4"
+		  href="?page={{ page_obj.next_page_number }}"
+		  >Next</a
+		>
+		<a
+		  class="btn btn-outline-info mb-4"
+		  href="?page={{ page_obj.paginator.num_pages }}"
+		  >Last</a
+		>
+	{% endif %}
+{% endif %}
+{% endif %}

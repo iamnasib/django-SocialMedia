@@ -1,0 +1,169 @@
+{% extends "gram/base.html" %}
+{% block title %} Notifications {% endblock title%}
+{%block head%}
+{% load static %}  
+
+{% endblock head %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h4>Notifications</h4>
+    </div>
+    
+    
+        <div class="card-body text-break">
+            <a href="#"  style="cursor:pointer;"
+    onclick="location.href='{% url 'request-list'  %}'">Follow Requests({{request.user.requested_by.count}})</a><br>
+    {% if notifications %}
+            {% for notification in notifications|slice:"0:15" %}
+                {% if notification.data.category == "love"%}
+                <span class="my-1  text-break" style="cursor:pointer;"
+                        onclick="location.href='{% url 'profile' username=notification.actor %}'">
+                        <img class="rounded-circle img-fluid"
+                    src="{{ notification.actor.DP.url }} " 
+                    style=" cursor: pointer; border:.1px solid  #e2e3e4; height: 40px;width: 40px;"/>
+                    <b> {{ notification.actor }}</span>
+                   </b> {{ notification.verb }} 
+                   <span class="my-1" style="cursor:pointer;"
+                onclick="location.href='{% url 'view-post' id=notification.data.pid %}'">
+                   {% if notification.data.caption %} :
+                       
+                       {{ notification.data.caption }}{% endif %}
+                   </span>
+                {% if notification.data.pid %}
+                &nbsp;&nbsp;
+                <span class="my-1 " style="cursor:pointer;"
+                onclick="location.href='{% url 'view-post' id=notification.data.pid %}'">
+                <img class="img-fluid"
+                src="{{ notification.description }} " 
+                style="cursor: pointer; border:.1px solid  #e2e3e4; height: 50px;width: 50px;"/>
+                </span>
+                {% endif %}<br>
+                <time class="small text-muted">{{ notification.timestamp|timesince }} ago </time>
+                {% endif %}<br>
+
+
+
+
+                {% if notification.data.category == "comment"%}
+                <span class="my-1  text-break" style="cursor:pointer;"
+                        onclick="location.href='{% url 'profile' username=notification.actor %}'">
+                        <img class="rounded-circle img-fluid"
+                    src="{{ notification.actor.DP.url }} " 
+                    style=" cursor: pointer; border:.1px solid  #e2e3e4; height: 40px;width: 40px;"/>
+                    <b> {{ notification.actor }}</span>
+                   </b> {{ notification.verb }} 
+                   <span class="my-1" style="cursor:pointer;"
+                onclick="location.href='{% url 'view-post' id=notification.data.pid %}'">
+                   {% if notification.data.caption %} :<b>
+                       
+                       {{ notification.data.caption }}</b>{% endif %}
+                       {%if notification.data.comment %}
+                       : {{notification.data.comment}}
+                       {% endif %}
+                   </span>
+                    
+                {% if notification.data.pid %}
+                &nbsp;&nbsp;
+                <span class="my-1 " style="cursor:pointer;"
+                onclick="location.href='{% url 'view-post' id=notification.data.pid %}'">
+                <img class="img-fluid"
+                src="{{ notification.description }} " 
+                style="cursor: pointer; border:.1px solid  #e2e3e4; height: 50px;width: 50px;"/>
+                </span>
+                {% endif %}<br>
+                <time class="small text-muted">{{ notification.timestamp|timesince }} ago </time>
+                {% endif %}
+
+
+                
+                {% if notification.data.category == "followRequest"%}
+                <div class="row">
+                    <div class="col-md-4">
+                        <span class="my-1  text-break" style="cursor:pointer;"
+                        onclick="location.href='{% url 'profile' username=notification.actor %}'">
+                        <img class="rounded-circle img-fluid"
+                    src="{{ notification.description }} " 
+                    style=" cursor: pointer; border:.1px solid  #e2e3e4; height: 40px;width: 40px;"/>
+                    <b> {{ notification.actor }}</span>
+                       </b> {% if notification.actor in request.user.requested_by %} 
+                       {{ notification.verb }} 
+                       {% else %}
+                        {% if notification.actor in request.user.following.all %}
+                            started following you
+                            {% else %}
+                            {{ notification.verb }}
+                        {% endif %}
+                       {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <span role="switch" style="width: 100%;" class="followRequest  " id="{{ notification.actor.id }}">
+                            {% if notification.actor in user.requested_by.all %}
+                            <a
+                            href="{% url 'accept-request'%}"
+                            id="followbtn{{ notification.actor.id }}"
+                            style="text-decoration:none;
+                            transition: .4s;"
+                            class="btn btn-sm btn-outline-dark">
+                            
+                            Accept
+                            </a>
+                            {% else %}
+                                {% if notification.actor in user.followers.all %}
+                                <a
+                                href="{% url 'follow'  %}"
+                                id="followbtn{{ notification.actor.id }}"
+                                style="text-decoration:none;
+                                transition: .4s;"
+                                class="btn btn-sm btn-outline-dark">
+                                
+                                Unfollow
+                                </a>
+                                {% else %}
+                                    {% if user in notification.actor.requested_by.all %}
+                                    <a
+                                    href="{% url 'follow' %}"
+                                    id="followbtn{{ notification.actor.id }}"
+                                    style="text-decoration:none;
+                                    transition: .4s;"
+                                    class="btn btn-sm btn-outline-dark">
+                                    Requested
+                                    </a>
+                                    {% else %}
+                                    <a
+                                    href="{% url 'follow'  %}"
+                                    id="followbtn{{ notification.actor.id }}"
+                                    style="text-decoration:none;
+                                    transition: .4s;"
+                                    class="btn btn-sm btn-outline-dark">
+                                    Follow
+                                    </a>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                            
+                        </span>
+
+
+                       
+                    </div>
+                    
+                </div>
+                <time class="small text-muted">{{ notification.timestamp|timesince }} ago </time><br>
+                   
+                   
+                    
+                
+                {% endif %}
+
+                {% endfor %}
+              </div>
+    {% else %}
+        <p>No NOTIFICATIONS</p>
+    {%endif%}
+    
+</div>
+
+{% endblock content %}
+
+<!-- <button class="dropdown-item" type="button">{{ notification.description.post_image.url }}</button>			 -->

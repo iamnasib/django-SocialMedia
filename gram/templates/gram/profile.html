@@ -1,0 +1,222 @@
+{% extends "gram/base.html" %}
+{% block title %} Profile {% endblock title%}
+{% load hitcount_tags %}
+{%block head%}
+{% load static %}  
+    <script src="{% static '/gram/javascript/toggle_list_grid.js' %}" type="text/javascript"></script> 
+{% endblock head %}
+{% block content %}
+<div class="profile">
+    {% if user.username == userobj.username %}
+    <div class="row text-center">
+        <div class="col-md-12 ">
+           <p class="small">Your profile has been visited <b>{{total_hits}}</b> times </p> 
+        </div>
+    </div>
+    <div class="row text-center">
+        <div class="col-md-12 ">
+            <span class="my-1" style="cursor:pointer;"
+            onclick="location.href='{% url 'blocked-users' %}'">Blocked users</span>
+        </div>
+    </div>
+    <hr>
+    {% else %}
+    {% if user.is_authenticated%}
+    <span class="Ublock my-1  btn btn-sm btn-outline-dark " id="{{ userobj.id }}" style="cursor:pointer;">
+        <span id="Block{{ userobj.id }}">
+            {% if userobj in user.blocked_user.all%}
+            Unblock
+            {%else%}
+            Block
+            {% endif %}
+        </span>
+     </span>
+     
+    <hr>{%endif%}
+    {%endif%}
+    <div class="row ">
+        <div class="col-md-3">
+            <img class="rounded-circle img-fluid"
+            src="{{ userobj.DP.url }} " style="cursor: pointer; border:.1px solid  #e2e3e4"/>
+        </div>
+        <div class="col-sm-2 mt-5">
+            <div class="small form-group text-center">
+                <h5 style="cursor: default;">{{posts.count}}</h5>
+                <label>Posts</label>
+            </div>
+        </div>
+        {% if disabled %}
+            <div class="col-sm-2 mt-5">
+                <div class="small form-group text-center">
+                    <h5 style="cursor: default; ">
+                        {{userobj.following.count}}</h5>
+                    <label>Followers</label>
+                </div>
+            </div>
+            <div class="col-sm-2 mt-5">
+                <div class="small form-group text-center">
+                    <h5 style="cursor: default; ">
+                        {{userobj.followers.count}}</h5>
+                    <label for="following">Following</label>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-sm-2 mt-5">
+                <div class="small form-group text-center">
+                    <h5 style="cursor: default; ">
+                        <a class="text-dark text-decoration-none" href="{% url 'followers' username=userobj.username%}">
+                        {{userobj.following.count}}</a></h5>
+                    <label>Followers</label>
+                </div>
+            </div>
+            <div class="col-sm-2 mt-5">
+                <div class="small form-group text-center">
+                    <h5 style="cursor: default; "><a class="text-dark text-decoration-none"  href="{% url 'following' username=userobj.username%}">
+                                                {{userobj.followers.count}}</a></h5>
+                    <label for="following">Following</label>
+                </div>
+            </div>
+        {% endif%}
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h5>{{userobj.full_name}}</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h6 class="text-break">{{userobj.bio}}</h6>
+        </div>
+    </div>
+    {% if userobj.website %}
+        <div class="row mb-2 ">
+            <div class="col-md-12">
+                <a href="{{userobj.website}}">{{ userobj.website }}</a>
+            </div>
+        </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-12">
+            <p class="small text-dark font-italic">Joined {{ userobj.date_joined |date:"F  Y" }}</p>
+        </div>
+    </div>
+    {% if user.is_authenticated %}
+        {% if user.username == userobj.username %}
+            <div class="row">
+                <div class="col-md-3">
+                    <a href="{% url 'edit-profile'%}" class="btn btn-sm btn-block btn-outline-dark ">Edit profile</a>
+                </div>
+            </div>
+        {% else %}
+            <div class="row">
+                <span role="switch" style="width: 100%;" class="followRequest" id="{{ userobj.id }}">
+                    {% if user in userobj.following.all %}
+                        <div class="col-md-3">
+                            <a
+                                href="{% url 'follow'  %}"
+                                id="followbtn{{ userobj.id }}"
+                                style="text-decoration:none;
+                                transition: .4s;"
+                                class="btn btn-sm btn-block btn-outline-dark">
+                                Unfollow
+                            </a>
+                        </div>
+                    {% else %}
+                        {% if user in userobj.requested_by.all %}
+                        <div class="col-md-3">
+                            <a
+                                href="{% url 'follow' %}"
+                                id="followbtn{{ userobj.id }}"
+                                style="text-decoration:none;
+                                transition: .4s;"
+                                class="btn btn-sm btn-block btn-outline-dark">
+                                Requested
+                            </a>
+                        </div>
+                        {% else %}
+                        <div class="col-md-3">
+                            <a
+                                href="{% url 'follow'  %}"
+                                id="followbtn{{ userobj.id }}"
+                                style="text-decoration:none;
+                                transition: .4s;"
+                                class="btn btn-sm btn-block btn-outline-dark">
+                                Follow
+                            </a>
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+    {% else %}
+        <p class="text-muted text-center font-weight-bold"> Please, login to follow </p>
+    {% endif %}
+    
+</div><hr class="my-4">
+
+{% for r in userobj.requested_by.all%}
+userobj.requested_by.all:{{r}}
+{% endfor %}
+{% for y in userobj.requested_to.all%}
+userobj.requested_to:{{y}}
+{% endfor %}
+{% for i in userobj.blocked_user.all%}
+blocked_user:{{i}}
+{% endfor %}
+{% for b in userobj.blocked_by.all%}
+blocked_by:{{b}}
+{% endfor %}
+<!-- <div class="d-none">
+Following
+{% for foll in following %}
+    <ul>
+        <a href="{% url 'profile' username=foll %}" class="btn btn-outline-dark "><li>{{foll}}</li></a>
+    </ul><br>
+    
+{% endfor %}<br>
+Followers<br>
+{% for folle in follower %}
+    <ul>
+        <a href="{% url 'profile' username=folle %}" class="btn btn-outline-dark "><li>{{folle}}</li></a>
+    </ul>
+    
+{% endfor %}
+</div> -->
+{% if user.is_authenticated %}
+    {% if disabled%}
+    <p class="text-muted text-center font-weight-bold">This account is private, Follow to see posts</p>
+    {% else %}
+    <div class="posts ">
+        
+        {% if posts %}
+        <div class="my-3 d-flex justify-content-between"><button type="button" role="switch" onclick="grid()">
+            grid
+        </button>
+        <button type="button" role="switch" onclick="list()">list</button></div>
+            <div class="grid" id="grid">
+                
+                {% for post in posts %}
+                    <img class="img-fluid mt-1"
+                    src="{{ post.post_image.url }} "  onclick='postclick("{{post.id}}")' style="cursor: pointer; width:366px;height:366px"/>
+                {% endfor %}
+                    
+            </div>
+            <!-- <button type="button"></button> -->
+            <div class="list" style="display: none;" id="list">
+                {% include 'gram/posts.html' %}
+            </div>
+        
+            
+        {% else %}
+            <p class="text-muted text-center font-weight-bold">No posts yet</p>
+        {% endif %}
+    </div>
+    {% endif %}
+{% else %}
+    <p class="text-muted text-center font-weight-bold"> Please, login to see posts </p>
+{% endif %}
+
+
+
+{% endblock content %}

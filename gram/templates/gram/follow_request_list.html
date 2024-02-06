@@ -1,0 +1,49 @@
+{% extends "gram/base.html" %}
+{% block title %} Follow Requests {% endblock title%}
+{%block head%}
+{% load static %}  
+
+{% endblock head %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h4>Follow Requests</h4>
+    </div>
+    {% if request.user.requested_by.all %}
+        <div class="card-body text-break">
+            {% for FollowRequest in request.user.requested_by.all %}
+            <div class="row" id="R{{ FollowRequest.id }}">
+                <div class="col-md-4">
+                    <span class="my-1  text-break" style="cursor:pointer;"
+                    onclick="location.href='{% url 'profile' username=FollowRequest %}'">
+                    <img class="rounded-circle img-fluid"
+                src="{{ FollowRequest.DP.url }} " 
+                style=" cursor: pointer; border:.1px solid  #e2e3e4; height: 40px;width: 40px;"/>
+                <b> {{ FollowRequest }}</span>
+                   </b> 
+                </div>
+                <div class="col-md-8">
+                    <span role="switch" class="acceptRequest" id="{{ FollowRequest.id }}">
+                        <span class="my-1 text-break btn btn-sm btn-outline-dark" id="followbtn{{ FollowRequest.id }}" style="cursor:pointer;">
+                            Accept
+                            </span>
+                        
+                    </span>
+                    <span role="switch" class="deleteRequest" id="{{ FollowRequest.id }}">
+                        <span class="my-1 text-break btn btn-sm btn-outline-dark" id="followbtn{{ FollowRequest.id }}" style="cursor:pointer;">
+                            Delete
+                            </span>
+                        
+                    </span>
+
+                   
+                </div>
+                
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+    <p class="text-muted text-center font-weight-bold my-1" >No follow requests</p>
+    {% endif%}
+</div>
+{% endblock content %}

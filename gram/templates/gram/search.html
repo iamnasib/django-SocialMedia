@@ -1,0 +1,24 @@
+{% extends "gram/base.html" %}
+{% block title %} Home {% endblock title%}
+    
+{% load static %}  
+{% block content %}
+<div class="row">
+
+    {# icon and search-box #}
+    <div class="col-6">
+      <i id="search-icon" class="fas fa-search"></i>
+      <input id="userinput" class="form-control" type="text" placeholder="Search"/>
+    </div>
+  
+    {# artist-list section #}
+    <div id="replaceable-content" class="col-6">
+        {% include 'gram/users-results-partial.html' %}
+        
+    </div>
+  
+</div>
+{% block footer %}
+<script type="text/javascript" src="{% static '/gram/javascript/search.js' %}"></script>
+{% endblock %}
+{% endblock content %}

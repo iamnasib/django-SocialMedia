@@ -1,0 +1,66 @@
+{% extends "gram/base.html" %}
+{% block title %} Upload Post {% endblock title%}
+{%block head%}
+{% load static %}  
+    <script src="{% static '/gram/javascript/tale_preview.js' %}" type="text/javascript"></script> 
+{% endblock head %}
+{% block content %}
+    <div class="form-content my-3 p-3">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-5">
+                    <div class="card shadow-lg border-1 rounded-lg mt-0 mb-3">
+                        <div class="card-header justify-content-center">
+                          <h4 class="font-weight-light my-3 text-center">Upload Post</h4>
+                        </div>
+                        {% include 'gram/messages.html' %}
+                        {% if form.errors %}
+  <div class="alert alert-danger alert-dismissible" role="alert">
+    <div id="form_errors">
+      {% for key, value in form.errors.items %}
+      <strong>{{ value }}</strong>
+      {% endfor %}
+    </div>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+{% endif %}
+                        <div class="card-body">
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-row my-0">
+                                    <div class="col-md-7 ">
+                                        <div class="form-group">
+                                            <label class="link-primary mb-1"  style="color: #007bff; cursor:pointer" for="file">Select Image <i class="fas fa-plus-square"></i> </label>
+                                            {{ tale_form.file }}
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <img id="preview" style="display: none;" src=""  />
+                                            <!-- <video  controls>
+                                                <source id="vid" src="" type="video/mp4">
+                                            </video> -->
+                                            <video id="vid" style="display: none;" src="" controls></video>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row justify-content-center ">
+                                    <div class="col-md-10 ">
+                                        <div class="form-group mt-0 mb-1">
+                                          <button  class="col-md-12 btn btn-outline-dark" id="upload">Upload</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+{% endblock content %}

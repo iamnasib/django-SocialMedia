@@ -1,0 +1,142 @@
+{%load static%}
+<!doctype html>
+
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+     
+    <!--Font awesome icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/8ec05e19a2.js" crossorigin="anonymous"></script>
+    <!-- zuck js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zuck.js/1.0.0/zuck.js" integrity="sha512-RhH3lo6pMIUZFMNjfGFViPetgR34hykLRqQ2Xz3zZu+3SXeEuXJ9DhZ4Z/yw1eTKyIz6eUKlN7gTv9WHE1jVyg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/zuck.js/1.0.0/zuck.min.css" integrity="sha512-RUBFvH8cCsOjwdTH5ewetvV1oNbv9jMo5cbErf9E1A3J7DrBtOjahv5pG303/mWf3aJmtvR+maxarX4an5U1Eg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/zuck.js/1.0.0/zuck.css" integrity="sha512-onJaDh4K1q0SKcFrJUYLxa/ohMeyN9Kt7yP3U4Cxyuj/RRKtFbVe1jw6d4L2nRu6x58pgBRDa7C2fgtKE0sAAA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/zuck.js/1.0.0/skins/facesnap.css" integrity="sha512-wQf37Z6Xov5YBrC1eBT/Si7ycflPcmEG28koesp9p7Jogc1m9+5XGY15SYWQdKhgjxVWr9Ati3BBOvuugpjojA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/zuck.js/1.0.0/skins/facesnap.min.css" integrity="sha512-Qlk1YumpHbHrQ2QZlLHYUj2WyouCkQYnuTr36gL9MJjjwIMxmiyTobeLqQGrydh10BTM0L2Qi3t/H//khVIhaw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/zuck.js/1.0.0/skins/snapgram.css" integrity="sha512-Kt0SL686WnQpr7vaWG1w+wMx/3KJI9haHNxFNFujCoVG1mvyz8XSLocs9LUUMyrYJzURhLezl6PaLx9jehUCAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {% load static %} 
+    {% load notifications_tags %}
+    
+    <link rel="stylesheet" href="{% static '/gram/css/btn_transition.css' %}" >
+    <script src="{% static 'gram/javascript/jquery-3.4.1.min.js' %}"></script>
+    <link href="{% static 'gram/css/search.css' %}"
+    rel="stylesheet"
+    media="screen">
+    <link href="{% static 'gram/css/loading.css' %}"rel="stylesheet"
+media="screen">
+
+    {% block head %}{% endblock %}
+    <title>Gram - {% block title %} {% endblock %} </title>
+</head>
+<body >
+  <div class="loading" id="loader">  
+    <div class="loading-text">  
+         <span class="loading-text-words">L</span>  
+         <span class="loading-text-words">O</span>  
+         <span class="loading-text-words">A</span>  
+         <span class="loading-text-words">D</span>  
+         <span class="loading-text-words">I</span>  
+         <span class="loading-text-words">N</span>  
+         <span class="loading-text-words">G</span>  
+    </div>  
+</div> 
+  
+  <div class="container p-3 my-3" style="display: none;" id="container">
+    <div class="row">
+      <div class="col-md-12">
+        <nav class="navbar navbar-expand-md navbar-light sticky-top mb-4" style="background-color: #f0f5f5">
+          <a href="/" class="navbar-brand">Gram</a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ml-auto">
+                  {% if user.is_authenticated %}
+                    <a href="{% url 'profile' username=user.username %}" class="nav-item nav-link">Profile</a>
+                    <a href="{% url 'logout' %}" class="nav-item nav-link">Logout</a> 
+                    <a href="{% url 'upload-post' %}" class="nav-item nav-link">UploadPost</a>
+                    <a href="{% url 'search' %}" class="nav-item nav-link">search</a>
+                    <a href="" class="nav-item nav-link"
+                    data-toggle="modal" data-target="#deleteAccountModal">Delete</a>
+                    <a href="{% url 'deactivate-user' %}" class="nav-item nav-link">Deactivate</a>
+                    <a href="{% url 'notifications' %}" class="nav-item nav-link">
+                      <i class="fa fa-bell" style="font-size:24px"></i>
+                      <span class="badge">{% live_notify_badge %}</span>
+                    </a>
+                    <a href="{% url 'saved-post' %}" class="nav-item nav-link">Saved posts</a>
+                    
+                    
+                    
+                    <!-- <span style="cursor:pointer; "
+                    role="switch" onclick="location.href='{% url 'deactivate-user' %}'">
+                    Delete
+                  </span> -->
+                  {% else %}
+                    <a href="{% url 'login' %}" class="nav-item nav-link">Sign in</a>
+                  {% endif %}
+                </div>
+            </div>
+        </nav>
+        
+        {% block content %}{% endblock %}
+        
+      </div>
+    </div>
+  </div>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="{% static 'notifications/notify.js' %}" type="text/javascript"></script>
+    {% register_notify_callbacks callbacks='fill_notification_badge' %}
+    <!-- <script>
+      var myVar;
+      
+      function myFunction() {
+        myVar = setTimeout(showPage, 2000);
+      }
+      
+      function showPage() {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("container").style.display = "block";
+      }
+      </script> -->
+    <script>  
+       $(window).on('load', function () {  
+           $("#loader").fadeOut("slow");  
+           document.getElementById("container").style.display = "block";
+      });  
+    </script>  
+    
+    <script src="https://unpkg.com/bootstrap-show-password@1.2.1/dist/bootstrap-show-password.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="{% static '/gram/javascript/like(ajax).js' %}" type="text/javascript"></script>
+    <script src="{% static '/gram/javascript/follow_block(ajax).js' %}" type="text/javascript"></script>
+    <!-- Modal -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1" role="dialog" aria-labelledby="deleteAccountModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteAccountModalTitle">Permanently delete account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
+        <span role="button" class="btn btn-outline-danger" onclick="location.href='{% url 'delete-user'  %}'"> Delete</span>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

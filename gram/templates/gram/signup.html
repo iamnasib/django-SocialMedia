@@ -1,0 +1,69 @@
+{% extends "gram/base.html" %} {% block title %} Signup {% endblock title%} 
+{%block content %}
+<div class="form-content my-3 p-3">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5">
+                <div class="card shadow-lg border-1 rounded mt-0 mb-5">
+                    <div class="card-header justify-content-center">
+                        <h4 class="font-weight-light my-4 text-center">Create Account</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %} 
+                            {% include 'gram/messages.html' %}
+                            {% if form.errors %}
+                                    <div class="alert alert-danger alert-dismissible" role="alert">
+                                        <div id="form_errors">
+                                            {% for key, value in form.errors.items %}
+                                                <strong>{{ value }}</strong>
+                                            {% endfor %}
+                                        </div>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            <div class="form-row justify-content-center my-3">
+                                <div class="col-md-12">
+                                    {{ form.full_name }}
+                                </div>
+                            </div>
+                            <div class="form-row justify-content-center my-3">
+                                <div class="col-md-12">
+                                    {{ form.username }}
+                                </div>
+                            </div>
+                            <div class="form-row justify-content-center my-3">
+                                <div class="col-md-12">
+                                        {{ form.email }}
+                                </div>
+                            </div>
+                            <div class="form-row justify-content-center my-3">
+                                <div class="col-md-12">
+                                    {{ form.password1 }} {{ form.errors.password }}
+                                </div>
+                            </div>
+                            <div class="form-row justify-content-center my-3">
+                                <div class="col-md-12">
+                                    {{ form.password2 }}    
+                                </div>
+                            </div>
+                            <div class="form-group mt-3 mb-0">
+                                <button type="submit" class="col-md-12 btn btn-outline-dark">
+                                    Sign Up</button><br /><br />
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="card-footer text-center ">
+                        <div class="small">
+                            <a href="{% url 'login' %}">Have an account? Go to Sign in</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

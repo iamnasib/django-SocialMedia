@@ -1,0 +1,70 @@
+{% extends "gram/base.html" %}
+{% block title %} Following {% endblock title%}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h4>{{user_profile.username}}</h4>
+    </div>
+
+    {% for user in following %}
+        <div class="card-body">
+            <span class="my-1  text-break" style="cursor:pointer;"
+                        onclick="location.href='{% url 'profile' username=user %}'">
+                        <img class="rounded-circle img-fluid"
+                    src="{{ user.DP.url }} " 
+                    style=" cursor: pointer; border:.1px solid  #e2e3e4; height: 40px;width: 40px;"/>
+                  {{ user }}</span>
+            {% if request.user == user_profile%}
+            <span class="removeFollowing my-1  btn btn-sm btn-outline-dark " id="{{ user.id }}" style="cursor:pointer;">
+               <span id="F{{ user.id }}">unfollow</span>
+            </span>
+            {% else %}
+            {% if request.user.username != user.username %}
+            <span role="switch" style="width: 100%;" class="followRequest" id="{{ user.id }}">
+                {% if request.user in user.following.all %}
+                    <div class="col-md-3">
+                        <a
+                            href="{% url 'follow'  %}"
+                            id="followbtn{{ user.id }}"
+                            style="text-decoration:none;
+                            transition: .4s;"
+                            class="btn btn-sm btn-outline-dark">
+                            Unfollow
+                        </a>
+                    </div>
+                {% else %}
+                    {% if request.user in user.requested_by.all %}
+                    <div class="col-md-3">
+                        <a
+                            href="{% url 'follow' %}"
+                            id="followbtn{{ user.id }}"
+                            style="text-decoration:none;
+                            transition: .4s;"
+                            class="btn btn-sm btn-outline-dark">
+                            Requested
+                        </a>
+                    </div>
+                    {% else %}
+                    <div class="col-md-3">
+                        <a
+                            href="{% url 'follow'  %}"
+                            id="followbtn{{ user.id }}"
+                            style="text-decoration:none;
+                            transition: .4s;"
+                            class="btn btn-sm  btn-outline-dark">
+                            Follow
+                        </a>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            </span>
+            {% endif %}
+            {% endif %}
+
+            <!-- <a href="{% url 'profile' username=user %}" class=" ">{{user}}</a> -->
+        </div>
+        
+        
+    {% endfor %}
+</div>
+{% endblock content %}
